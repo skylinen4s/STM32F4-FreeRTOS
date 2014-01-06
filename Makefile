@@ -1,6 +1,6 @@
 TARGET:=FreeRTOS
 # TODO change to your ARM gcc toolchain path
-TOOLCHAIN_ROOT:=~/gcc-arm-none-eabi
+TOOLCHAIN_ROOT:=/usr/local/gcc-arm-none-eabi-4_7-2013q3
 TOOLCHAIN_PATH:=$(TOOLCHAIN_ROOT)/bin
 TOOLCHAIN_PREFIX:=arm-none-eabi
 
@@ -17,7 +17,9 @@ INCLUDE+=-I$(FREERTOS)/include
 INCLUDE+=-I$(FREERTOS)/portable/GCC/ARM_CM4F
 INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Device/ST/STM32F4xx/Include
 INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Include
+INCLUDE+=-I$(CURDIR)/Libraries/STM32F4-Discovery
 INCLUDE+=-I$(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/inc
+INCLUDE+=-I$(CURDIR)/Libraries/servo_motor
 INCLUDE+=-I$(CURDIR)/config
 
 BUILD_DIR = $(CURDIR)/build
@@ -26,6 +28,8 @@ BIN_DIR = $(CURDIR)/binary
 # vpath is used so object files are written to the current directory instead
 # of the same directory as their source files
 vpath %.c $(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src \
+	  $(CURDIR)/Libraries/STM32F4-Discovery \
+	  $(CURDIR)/Libraries/servo_motor \
 	  $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
 	  $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F 
 
@@ -38,6 +42,12 @@ SRC+=system_stm32f4xx.c
 SRC+=main.c
 SRC+=syscalls.c
 
+# STM32F4-Discovery
+SRC+=stm32f4_discovery.c
+
+# Servo Motor
+SRC+=servo_motor.c
+
 # FreeRTOS Source Files
 SRC+=port.c
 SRC+=list.c
@@ -47,12 +57,12 @@ SRC+=timers.c
 SRC+=heap_4.c
 
 # Standard Peripheral Source Files
-# SRC+=stm32f4xx_syscfg.c
+SRC+=stm32f4xx_syscfg.c
 SRC+=misc.c
 #SRC+=stm32f4xx_adc.c
 #SRC+=stm32f4xx_dac.c
 # SRC+=stm32f4xx_dma.c
-#SRC+=stm32f4xx_exti.c
+SRC+=stm32f4xx_exti.c
 #SRC+=stm32f4xx_flash.c
 SRC+=stm32f4xx_gpio.c
 SRC+=stm32f4xx_i2c.c
